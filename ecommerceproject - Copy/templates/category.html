@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{category.description|truncatewords:155}}
+    {% else %}
+        welcome to ABC store
+    {% endif %}
+{% endblock %}
+
+
+{% block title %}
+    {% if category %}
+        {{category.name}}-ABC store
+    {% else %}
+        See our new collections
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+    {% if category %}
+        <div>
+            <div class="row my_row_class" >
+                <div class="mx-auto" >
+                <p><a href="{% url 'shop:allProdCat' %}">our product collections</a></p>
+                    </div>
+                </div>
+             </div>
+    {% endif %}
+                <div class="mx_auto">
+                    {% if category %}
+                    <img class="my_image" src="{{category.image.url}}" width="1110px" height="200px" >
+                    <p>{{category.name}}</p>
+                </div>
+                <br>
+                <div>
+                    <h1 class="text-center my_title" >{{category.name}}</h1>
+                    <p class="text-justify" >{{category.description}}</p>
+                </div>
+                    {% else %}
+                <img class="my_image my_image_padding" src="{% static 'img/banner.png' %}" alt="our products" width="1110px" height="200px">
+
+            <br>
+            <div>
+                <h1 class="text-center my_title">our products collections</h1>
+                <p class="text-justify" >qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+                </p>
+            </div>
+            {% endif %}
+            <div class="container" >
+                <div class="row mx_auto">
+                    {% for product in products.object_list %}
+
+                    <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-lg-4">
+                        <div class="mt-5">
+                        <div class="card text-center" style="min-width:18rem;">
+                            <a href="{{product.get_url}}">
+                                <img class="card-img-top my_image" src="{{product.image.url}}" alt="{{products.name}}" width="200px" height="200px"></a>
+
+                            <div class="card-body">
+                                <h4>{{product.name}}</h4>
+                                <p>{{product.price}}</p>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="mx-auto">
+                    {% if products.paginator.num_pages > 1 %}
+                    <hr>
+                    <div class="text-center">
+                        {% for pg in products.paginator.page_range %}
+                        <a href="?page={{pg}}" class="btn btn-light btn-sm {%if products.number == pg %}active{% endif %}">{{pg}}</a>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <br>
+            </div>
+
+{% endblock %}
